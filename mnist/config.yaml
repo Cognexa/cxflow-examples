@@ -1,0 +1,26 @@
+dataset:
+  class: datasets.MNISTDataset
+
+model:
+  name: MajorityExample
+  class: mnist.MNISTNet
+
+  optimizer:
+    class: AdamOptimizer
+    learning_rate: 0.001
+
+  inputs: [images, labels]
+  outputs: [accuracy, predictions, loss]
+
+main_loop:
+  extra_streams: [test]
+
+hooks:
+- ComputeStats:
+    variables:
+      loss: [mean, std]
+      accuracy: [mean]
+- LogVariables
+- CatchSigint
+- StopAfter:
+    epochs: 10
