@@ -22,7 +22,7 @@ references:
     run:
       name: Run training.
       command: |
-        cxflow train -v config/fuel.yaml
+        cxflow train -v majority/config.yaml
 
 jobs:
 
