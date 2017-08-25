@@ -1,0 +1,1 @@
+from .majority import MajorityDataset

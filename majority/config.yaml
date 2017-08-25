@@ -1,0 +1,31 @@
+dataset:
+  class: datasets.MajorityDataset
+  n_examples: 500
+  dim: 11
+  batch_size: 4
+
+model:
+  name: MajorityExample
+  class: majority.MajorityNet
+
+  optimizer:
+    class: AdamOptimizer
+    learning_rate: 0.001
+
+  hidden: 100
+
+  inputs: [x, y]
+  outputs: [accuracy, predictions, loss]
+
+main_loop:
+  extra_streams: [test]
+
+hooks:
+- ComputeStats:
+    variables:
+      loss: [mean, std]
+      accuracy: [mean]
+- LogVariables
+- CatchSigint
+- StopAfter:
+    epochs: 10
