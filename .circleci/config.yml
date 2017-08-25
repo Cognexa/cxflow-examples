@@ -28,7 +28,7 @@ references:
     run:
       name: Run MNIST training
       command: |
-        cxflow dataset download -v mnnist/config.yaml
+        cxflow dataset download -v mnist/config.yaml
         cxflow train -v mnist/config.yaml
 
 jobs:
