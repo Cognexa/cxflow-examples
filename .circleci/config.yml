@@ -1,0 +1,44 @@
+version: 2
+
+references:
+
+  ubuntu_deps: &ubuntu_deps
+    run:
+      name: Install fuel dependencies on Ubuntu.
+      command: |
+        apt update
+        apt -y install git build-essential python3-dev python3-pip wget curl
+
+  install: &install
+    run:
+      name: Install cxflow
+      command: |
+        # cxflow
+        source <(curl -fsSL https://raw.githubusercontent.com/Cognexa/ci-utils/master/git-utils.sh)
+        fallback_pip_install_branch https://github.com/Cognexa/cxflow.git "$CIRCLE_BRANCH"
+        fallback_pip_install_branch https://github.com/Cognexa/cxflow-tensorflow.git "$CIRCLE_BRANCH"
+
+  test_majority: &test_majority
+    run:
+      name: Run training.
+      command: |
+        cxflow train -v majority/config.yaml
+
+jobs:
+
+  test_ubuntu_majority:
+    docker:
+      - image: ubuntu:rolling
+    working_directory: cxflow-examples
+    steps:
+      - *ubuntu_deps
+      - checkout
+      - *install
+      - *test_majority
+
+workflows:
+
+  version: 2
+  test-matrix:
+    jobs:
+      - test_ubuntu_majority
