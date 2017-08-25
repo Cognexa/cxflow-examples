@@ -20,14 +20,15 @@ references:
 
   test_majority: &test_majority
     run:
-      name: Run training.
+      name: Run majority training
       command: |
         cxflow train -v majority/config.yaml
 
   test_majority: &test_mnist
     run:
-      name: Run training.
+      name: Run MNIST training
       command: |
+        cxflow dataset download -v mnnist/config.yaml
         cxflow train -v mnist/config.yaml
 
 jobs:
