@@ -21,4 +21,3 @@ cxflow train convnet/config.yaml
 ```
 cxflow train convnet/config.yaml model.n_gpus:int=2
 ```
-
