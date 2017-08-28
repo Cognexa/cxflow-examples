@@ -2,8 +2,8 @@ dataset:
   class: datasets.MNISTDataset
 
 model:
-  name: MNISTExample
-  class: mnist.MNISTNet
+  name: ConvNetExample
+  class: convnet.SimpleConvNet
 
   optimizer:
     class: AdamOptimizer
