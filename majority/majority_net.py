@@ -23,4 +23,4 @@ class MajorityNet(cxtf.BaseModel):
 
         logging.debug('Constructing predictions and accuracy')
         predictions = tf.greater_equal(y_hat, 0.5, name='predictions')
-        tf.reduce_mean(tf.cast(tf.equal(predictions, tf.cast(y, tf.bool)), tf.float32, name='accuracy'))
+        tf.equal(predictions, tf.cast(y, tf.bool), name='accuracy')
