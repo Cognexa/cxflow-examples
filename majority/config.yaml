@@ -25,6 +25,8 @@ hooks:
     variables:
       loss: [mean, std]
       accuracy: [mean]
+- SaveBest:
+    stream: test
 - LogVariables
 - CatchSigint
 - StopAfter:

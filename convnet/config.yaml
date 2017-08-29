@@ -2,8 +2,8 @@ dataset:
   class: datasets.MNISTDataset
 
 model:
-  name: MNISTExample
-  class: mnist.MNISTNet
+  name: ConvNetExample
+  class: convnet.SimpleConvNet
 
   optimizer:
     class: AdamOptimizer
@@ -23,4 +23,4 @@ hooks:
 - LogVariables
 - CatchSigint
 - StopAfter:
-    epochs: 10
+    minutes: 5
