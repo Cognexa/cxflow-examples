@@ -1,9 +1,8 @@
+import cxflow as cx
 import numpy.random as npr
 
-from cxflow.datasets import BaseDataset, AbstractDataset
 
-
-class MajorityDataset(BaseDataset):
+class MajorityDataset(cx.BaseDataset):
     """
     Toy dataset for the majority task.
 
@@ -17,7 +16,6 @@ class MajorityDataset(BaseDataset):
         :param n_examples: number of examples to be generated
         :param dim: example dimension
         :param batch_size: batch size
-        :param kwargs: additional unused ``**kwargs``
         """
         self.batch_size = batch_size
 
@@ -27,12 +25,12 @@ class MajorityDataset(BaseDataset):
         self._train_x, self._train_y = x[:int(.8 * n_examples)], y[:int(.8 * n_examples)]
         self._test_x, self._test_y = x[int(.8 * n_examples):], y[int(.8 * n_examples):]
 
-    def train_stream(self) -> AbstractDataset.Stream:
+    def train_stream(self) -> cx.AbstractDataset.Stream:
         for i in range(0, len(self._train_x), self.batch_size):
             yield {'x': self._train_x[i: i + self.batch_size],
                    'y': self._train_y[i: i + self.batch_size]}
 
-    def test_stream(self) -> AbstractDataset.Stream:
+    def test_stream(self) -> cx.AbstractDataset.Stream:
         for i in range(0, len(self._test_x), self.batch_size):
             yield {'x': self._test_x[i: i + self.batch_size],
                    'y': self._test_y[i: i + self.batch_size]}
