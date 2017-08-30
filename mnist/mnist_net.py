@@ -22,4 +22,4 @@ class MNISTNet(cxtf.BaseModel):
         loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=logits)
         tf.identity(loss, name='loss')
         predictions = tf.argmax(logits, 1, name='predictions')
-        tf.reduce_mean(tf.cast(tf.equal(predictions, labels), tf.float32, name='accuracy'))
+        tf.equal(predictions, labels, name='accuracy')

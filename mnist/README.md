@@ -4,7 +4,6 @@ neural network for hand-written character recognition.
 
 It is required to have **python 3.5+** and **pip** available in your system.
 
-
 1. Install **cxflow-tensorflow** and download the examples (if not done yet):
 ```
 pip3 install cxflow cxflow-tensorflow --upgrade

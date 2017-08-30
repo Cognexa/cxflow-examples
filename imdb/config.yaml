@@ -1,0 +1,43 @@
+dataset: &dataset
+  class: datasets.IMDBDataset
+  batch_size: 500
+
+model: &model
+  name: IMDB_GRU
+  class: imdb.SimpleGRU
+  n_gpus: 1
+
+  optimizer:
+    class: AdamOptimizer
+    learning_rate: 0.001
+
+  inputs: [x, y]
+  outputs: [accuracy, predictions, loss]
+  session_config: {allow_soft_placement: True}
+
+main_loop:
+  extra_streams: [test]
+
+hooks: &hooks
+- ComputeStats:
+    variables:
+      loss: [mean]
+      accuracy: [mean]
+- LogVariables
+- CatchSigint
+- SaveBest:
+    stream: test
+- LogProfile
+- cxflow_tensorflow.hooks.WriteTensorboard
+- StopAfter:
+    epochs: 10
+
+predict:
+  dataset:
+    <<: *dataset
+  model:
+    <<: *model
+    inputs: [x]
+    outputs: [predictions]
+  hooks:
+    - imdb.IMDBPredict

@@ -1,0 +1,32 @@
+dataset:
+  class: datasets.IMDBDataset
+  batch_size: 100
+
+model:
+  name: IMDB_GRU
+  class: imdb.SimpleGRU
+  n_gpus: 1
+
+  optimizer:
+    class: AdamOptimizer
+    learning_rate: 0.001
+
+  inputs: [x, y]
+  outputs: [accuracy, predictions, loss]
+  session_config: {allow_soft_placement: True}
+
+main_loop:
+  extra_streams: [test]
+
+hooks:
+- ComputeStats:
+    variables:
+      loss: [mean]
+      accuracy: [mean]
+- LogVariables
+- CatchSigint
+- SaveBest:
+    stream: test
+- LogProfile
+- StopAfter:
+    iterations: 1
