@@ -31,6 +31,12 @@ references:
         cxflow dataset download -v mnist/config.yaml
         cxflow train -v mnist/config.yaml
 
+  test_imdb: &test_imdb
+    run:
+      name: Run IMDB training
+      command: |
+        cxflow train -v imdb/config.yaml hooks.StopAfter.iterations:int=1
+
 jobs:
 
   test_ubuntu:
@@ -43,6 +49,8 @@ jobs:
       - *install
       - *test_majority
       - *test_mnist
+      - *test_imdb
+
 workflows:
 
   version: 2
