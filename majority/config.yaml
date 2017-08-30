@@ -21,13 +21,11 @@ main_loop:
   extra_streams: [test]
 
 hooks:
-- ComputeStats:
-    variables:
-      loss: [mean, std]
-      accuracy: [mean]
-- SaveBest:
-    stream: test
-- LogVariables
-- CatchSigint
-- StopAfter:
-    epochs: 10
+  - ComputeStats:
+      variables: [loss, accuracy]
+  - SaveBest:
+      stream: test
+  - LogVariables
+  - CatchSigint
+  - StopAfter:
+      epochs: 10

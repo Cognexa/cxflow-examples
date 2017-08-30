@@ -12,7 +12,7 @@ class IMDBDataset(BaseDataset):
     Reference: <http://ai.stanford.edu/~amaas/data/sentiment/>
     """
 
-    def _init_with_kwargs(self, batch_size: int=100, maxlen: int=400, skip_top: int=50, **kwargs) -> None:
+    def _configure_dataset(self, batch_size: int=100, maxlen: int=400, skip_top: int=50, **kwargs) -> None:
         self._batch_size = batch_size
         self._maxlen = maxlen
         self._data_loaded = False
@@ -33,7 +33,7 @@ class IMDBDataset(BaseDataset):
     @property
     def vocab_size(self) -> int:
         self._load_data()
-        return max(np.max(self._train_x), np.max(self._test_x), np.max(self._train_y), np.max(self._test_y))+1
+        return max(np.max(self._train_x), np.max(self._test_x), np.max(self._train_y), np.max(self._test_y)) + 1
 
     @property
     def maxlen(self) -> int:

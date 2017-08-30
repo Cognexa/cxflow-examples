@@ -9,7 +9,7 @@ class MajorityDataset(cx.BaseDataset):
     See ../majority/README.md for basic usage. or <https://cognexa.github.io/cxflow/tutorial> for detailed tutorial.
     """
 
-    def _init_with_kwargs(self, n_examples: int, dim: int, batch_size: int, **kwargs) -> None:
+    def _configure_dataset(self, n_examples: int, dim: int, batch_size: int, **kwargs) -> None:
         """
         Randomly generate the data and split them to train and test streams in 4:1 ratio.
 

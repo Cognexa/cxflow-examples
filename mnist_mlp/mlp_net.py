@@ -5,7 +5,7 @@ import tensorflow as tf
 import tensorflow.contrib.keras as K
 
 
-class MNISTNet(cxtf.BaseModel):
+class MNIST_MLP(cxtf.BaseModel):
     """Simple 2-layered MLP for MNIST hand-written digits recognition."""
 
     def _create_model(self, hidden: int=100) -> None:
