@@ -35,7 +35,7 @@ references:
     run:
       name: Run IMDB training
       command: |
-        cxflow train -v imdb/config.yaml hooks.StopAfter.iterations:int=1
+        cxflow train -v .circleci/test_imdb.yaml
 
 jobs:
 
