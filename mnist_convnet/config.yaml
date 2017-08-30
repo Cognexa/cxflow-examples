@@ -21,4 +21,4 @@ hooks:
   - LogVariables
   - CatchSigint
   - StopAfter:
-      minutes: 5
+      minutes: 2

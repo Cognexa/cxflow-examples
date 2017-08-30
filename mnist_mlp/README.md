@@ -1,4 +1,4 @@
-# MNIST hand-written digits recognition
+# MNIST Hand-written Digits Recognition
 This is simple **cxflow-tensorflow** implementation of MLP
 neural network for hand-written character recognition.
 
@@ -13,6 +13,6 @@ cd cxflow-examples
 
 2. Download the data and run the training:
 ```
-cxflow dataset download mnist/config.yaml
-cxflow train mnist/config.yaml
+cxflow dataset download mnist_mlp
+cxflow train mnist_mlp
 ```

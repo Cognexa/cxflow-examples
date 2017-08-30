@@ -23,6 +23,7 @@ references:
       name: Run majority training
       command: |
         cxflow train -v majority
+        cxflow resume -v log/MajorityExample*
 
   test_mnist_mlp: &test_mnist_mlp
     run:
