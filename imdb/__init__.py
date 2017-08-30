@@ -1,1 +1,2 @@
-from .lstm_net import SimpleLSTM
+from .gru_net import SimpleGRU
+from .imdb_prediction_hook import IMDBPredict
