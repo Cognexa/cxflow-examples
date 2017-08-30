@@ -1,8 +1,8 @@
-dataset: &dataset
+dataset:
   class: datasets.IMDBDataset
-  batch_size: 500
+  batch_size: 100
 
-model: &model
+model:
   name: IMDB_GRU
   class: imdb.SimpleGRU
   n_gpus: 1
@@ -18,7 +18,7 @@ model: &model
 main_loop:
   extra_streams: [test]
 
-hooks: &hooks
+hooks:
 - ComputeStats:
     variables:
       loss: [mean]
@@ -28,16 +28,5 @@ hooks: &hooks
 - SaveBest:
     stream: test
 - LogProfile
-- cxflow_tensorflow.hooks.WriteTensorboard
 - StopAfter:
-    epochs: 10
-
-predict:
-  dataset:
-    <<: *dataset
-  model:
-    <<: *model
-    inputs: [x]
-    outputs: [predictions]
-  hooks:
-    - imdb.IMDBPredict
+    iterations: 1
