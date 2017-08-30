@@ -1,5 +1,3 @@
-import logging
-
 import cxflow_tensorflow as cxtf
 import tensorflow as tf
 from tensorflow.contrib.keras.python.keras.layers import Embedding, GRU, Dropout, Dense, Bidirectional

@@ -2,6 +2,7 @@ import logging
 import gzip
 import struct
 import urllib.request
+import os
 import os.path as path
 import numpy as np
 from cxflow.datasets import BaseDataset, AbstractDataset
@@ -16,7 +17,7 @@ FILENAMES = {'train_images': 'train-images-idx3-ubyte.gz',
 class MNISTDataset(BaseDataset):
     """ MNIST dataset for hand-written digits recognition."""
 
-    def _init_with_kwargs(self, data_root='mnist', batch_size:int=100, **kwargs) -> None:
+    def _configure_dataset(self, data_root=path.join('datasets', '.mnist-data'), batch_size:int=100, **kwargs) -> None:
         self._batch_size = batch_size
         self._data_root = data_root
         self._data = {}
@@ -58,5 +59,6 @@ class MNISTDataset(BaseDataset):
             if path.exists(target):
                 logging.info('\t%s already exists', target)
             else:
+                os.makedirs(self._data_root, exist_ok=True)
                 logging.info('\tdownloading %s', target)
                 urllib.request.urlretrieve(DOWNLOAD_ROOT+part, target)

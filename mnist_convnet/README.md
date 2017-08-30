@@ -13,11 +13,11 @@ cd cxflow-examples
 
 2. Download the data and train the network:
 ```
-cxflow dataset download convnet/config.yaml
-cxflow train convnet/config.yaml
+cxflow dataset download mnist_convnet
+cxflow train mnist_convnet
 ```
 
-3. Train on GPU(s):
+3. Train on two GPUs (omit `model.n_gpus:int=2` in order to train on CPU):
 ```
-cxflow train convnet/config.yaml model.n_gpus:int=2
+cxflow train mnist_convnet model.n_gpus:int=2
 ```

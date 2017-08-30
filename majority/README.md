@@ -12,5 +12,14 @@ cd cxflow-examples
 
 2. Train the majority network
 ```
-cxflow train majority/config.yaml
+cxflow train majority
 ```
+
+The best network will be saved in `log/MajorityExample_<dir_name>`.
+
+3. Resume the training
+```
+cxflow resume log/MajorityExample_<dir_name>
+```
+
+The very first epoch should perform similarly well to the last epoch of the previous training.

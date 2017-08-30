@@ -2,8 +2,8 @@ dataset:
   class: datasets.MNISTDataset
 
 model:
-  name: ConvNetExample
-  class: convnet.SimpleConvNet
+  name: MNIST_MLP_Example
+  class: mnist_mlp.MNIST_MLP
 
   optimizer:
     class: AdamOptimizer
@@ -16,11 +16,9 @@ main_loop:
   extra_streams: [test]
 
 hooks:
-- ComputeStats:
-    variables:
-      loss: [mean, std]
-      accuracy: [mean]
-- LogVariables
-- CatchSigint
-- StopAfter:
-    minutes: 5
+  - ComputeStats:
+      variables: [loss, accuracy]
+  - LogVariables
+  - CatchSigint
+  - StopAfter:
+      epochs: 10

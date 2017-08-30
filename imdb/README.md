@@ -1,9 +1,9 @@
-# IMDB review sentiment dataset
+# IMDB Review Sentiment Dataset
 In this example, we train a simple GRU recurrent network for sentiment analysis for movie reviews.
 
 The network is trained on IMDB dataset <http://ai.stanford.edu/~amaas/data/sentiment/>.
 
-Trained networ can be easily applied to a new review as explained bellow.
+Trained network can be easily applied to a new review as explained bellow.
 
 It is required to have **python 3.5+** and **pip** available in your system.
 

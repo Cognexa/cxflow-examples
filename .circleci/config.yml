@@ -22,14 +22,22 @@ references:
     run:
       name: Run majority training
       command: |
-        cxflow train -v majority/config.yaml
+        cxflow train -v majority
+        cxflow resume -v log/MajorityExample*
 
-  test_majority: &test_mnist
+  test_mnist_mlp: &test_mnist_mlp
     run:
-      name: Run MNIST training
+      name: Run MNIST MLP training
       command: |
-        cxflow dataset download -v mnist/config.yaml
-        cxflow train -v mnist/config.yaml
+        cxflow dataset download -v mnist_mlp
+        cxflow train -v mnist_mlp
+
+  test_mnist_convnet: &test_mnist_convnet
+    run:
+      name: Run MNIST Convnet training
+      command: |
+        cxflow dataset download -v mnist_convnet
+        cxflow train -v mnist_convnet
 
   test_imdb: &test_imdb
     run:
@@ -48,7 +56,8 @@ jobs:
       - checkout
       - *install
       - *test_majority
-      - *test_mnist
+      - *test_mnist_mlp
+      - *test_mnist_convnet
       - *test_imdb
 
 workflows:
