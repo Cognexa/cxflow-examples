@@ -1,26 +1,24 @@
-# Cxflow Examples
+# cxflow Examples
 
 [![CircleCI](https://circleci.com/gh/Cognexa/cxflow-examples/tree/master.svg?style=shield)](https://circleci.com/gh/Cognexa/cxflow-examples/tree/master)
 [![Development Status](https://img.shields.io/badge/status-CX%20Regular-brightgreen.svg?style=flat)]()
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)]()
 [![Master Developer](https://img.shields.io/badge/master-Adam%20Blažek-lightgrey.svg?style=flat)]()
 
-This is the repository containing various examples for [cxflow](Cognexa/cxflow).
-Before you dive in, make sure you have already read the [official cxflow documentation](https://cxflow.org/)
-and the 10-minutes tutorials for both [cxflow](https://cxflow.org/tutorial.html) and
-[cxflow-tensorflow](https://tensorflow.cxflow.org/tutorial.html). 
+This repository contains various tested examples of machine learning models created with [cxflow](Cognexa/cxflow) framework.
 
-The repository is organized into multiple directories.
-Firstly, there is a `datasets/` directory which contains the implementation of various datasets that are used in the following examples.
+## Quick start
+- [10 minutes **cxflow** tutorial](https://cxflow.org/tutorial.html)
+- [5 minutes **cxflow-tensorflow** tutorial](https://tensorflow.cxflow.org/tutorial.html).
 
-Secondly, example directories are provided.
-We suggest you to walk them through in the following order, however, it is completely up to you.
-Each directory contains a `Readme` file which describes in detail the process of obtaining the data, training a simple model and in some cases additional information.
+## Example models
 
-- [majority/](majority/) - full implementation of the [official cxflow tutorial](https://cxflow.org/tutorial.html).
-- [mnist_mlp/](mnist_mlp/) - a simple experiment with MNIST dataset and shallow multi-layer perceptron.
-- [mnist_convnet/](mnist_convnet/) - a more advanced experiment with MNIST dataset and a convolutional network.
-- [imdb/](imdb/) - an implementation of sentiment analysis using the IMDB dataset and a bi-directional reccurent neural network.
+0. [**cxflow** compatible datasets](datasets/) for the following models
+
+1. [Bit majority task](majority/)
+2. [MLP network for MNIST](mnist_mlp/)
+3. [Convolutional network for MNIST](mnist_convnet/)
+4. [IMDB moview review sentiment](imdb/)
 
 ## Contribution
 In case you have created a nice experiment using **cxflow**, do not hesitate to fork this repository and make a pull request.
