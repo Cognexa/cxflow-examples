@@ -2,10 +2,10 @@ import sys
 
 import tensorflow.contrib.keras as K
 import numpy as np
-import cxflow as cx
+from cxflow.datasets import BaseDataset, AbstractDataset
 
 
-class IMDBDataset(cx.BaseDataset):
+class IMDBDataset(BaseDataset):
     """
     IMDB dataset for review binary sentiment classification.
 
@@ -39,7 +39,7 @@ class IMDBDataset(cx.BaseDataset):
     def maxlen(self) -> int:
         return self._maxlen
 
-    def train_stream(self) -> cx.Stream:
+    def train_stream(self) -> AbstractDataset.Stream:
         self._load_data()
         perm = np.random.permutation(len(self._train_x))
         perm_x = self._train_x[perm]
@@ -48,13 +48,13 @@ class IMDBDataset(cx.BaseDataset):
             yield {'x': perm_x[i: i + self._batch_size],
                    'y': perm_y[i: i + self._batch_size]}
 
-    def test_stream(self) -> cx.Stream:
+    def test_stream(self) -> AbstractDataset.Stream:
         self._load_data()
         for i in range(0, len(self._test_x), self._batch_size):
             yield {'x': self._test_x[i: i + self._batch_size],
                    'y': self._test_y[i: i + self._batch_size]}
 
-    def predict_stream(self) -> cx.Stream:
+    def predict_stream(self) -> AbstractDataset.Stream:
         self._load_data()
         while True:
             print('Type the review or leave empty to end: ', end='', flush=True)

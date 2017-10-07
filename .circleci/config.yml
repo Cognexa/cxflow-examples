@@ -8,7 +8,6 @@ references:
       command: |
         apt update
         apt -y install git python3-dev python3-pip wget curl
-        pip3 install tensorflow
 
   install: &install
     run:
