@@ -13,7 +13,6 @@ model:
     learning_rate: 0.001
 
   hidden: 100
-  dim: 11
 
   inputs: [x, y]
   outputs: [accuracy, predictions, loss]
