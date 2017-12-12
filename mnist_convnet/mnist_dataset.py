@@ -4,6 +4,7 @@ import struct
 import urllib.request
 import os
 import os.path as path
+from typing import Iterable
 
 import numpy as np
 import cxflow as cx
@@ -15,14 +16,23 @@ FILENAMES = {'train_images': 'train-images-idx3-ubyte.gz',
              'test_labels': 't10k-labels-idx1-ubyte.gz'}
 
 
-class MNISTDataset(cx.BaseDataset):
+class MNISTDataset(cx.DownloadableDataset):
     """ MNIST dataset for hand-written digits recognition."""
 
-    def _configure_dataset(self, data_root=path.join('datasets', '.mnist-data'), batch_size:int=100, **kwargs) -> None:
+    def _configure_dataset(self, data_root=path.join('mnist_convnet', '.mnist-data'), batch_size:int=100, **kwargs) -> None:
         self._batch_size = batch_size
         self._data_root = data_root
+        self._download_urls = [path.join(DOWNLOAD_ROOT, filename) for filename in FILENAMES.values()]
         self._data = {}
         self._data_loaded = False
+
+    @property
+    def data_root(self) -> str:
+        return super().data_root
+
+    @property
+    def download_urls(self) -> Iterable[str]:
+        return super().download_urls
 
     def _load_data(self) -> None:
         if not self._data_loaded:
@@ -52,14 +62,3 @@ class MNISTDataset(cx.BaseDataset):
         for i in range(0, len(self._data['test_labels']), self._batch_size):
             yield {'images': self._data['test_images'][i: i + self._batch_size],
                    'labels': self._data['test_labels'][i: i + self._batch_size]}
-
-    def download(self) -> None:
-        """Download method may be invoked with `cxflow dataset download <path-to-config>`."""
-        for part in FILENAMES.values():
-            target = path.join(self._data_root, part)
-            if path.exists(target):
-                logging.info('\t%s already exists', target)
-            else:
-                os.makedirs(self._data_root, exist_ok=True)
-                logging.info('\tdownloading %s', target)
-                urllib.request.urlretrieve(DOWNLOAD_ROOT+part, target)
