@@ -1,10 +1,8 @@
 import logging
 import gzip
 import struct
-import urllib.request
 import os
 import os.path as path
-from typing import Iterable
 
 import numpy as np
 import cxflow as cx
@@ -25,14 +23,6 @@ class MNISTDataset(cx.DownloadableDataset):
         self._download_urls = [path.join(DOWNLOAD_ROOT, filename) for filename in FILENAMES.values()]
         self._data = {}
         self._data_loaded = False
-
-    @property
-    def data_root(self) -> str:
-        return super().data_root
-
-    @property
-    def download_urls(self) -> Iterable[str]:
-        return super().download_urls
 
     def _load_data(self) -> None:
         if not self._data_loaded:
