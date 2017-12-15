@@ -1,0 +1,4 @@
+dataset:
+  class: cifar100.CIFARDataset
+  batch_size: 4
+
