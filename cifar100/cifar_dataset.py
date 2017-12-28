@@ -3,6 +3,7 @@ import tarfile
 import pickle
 import os
 import os.path as path
+import shutil
 
 import numpy as np
 import cxflow as cx
@@ -10,12 +11,9 @@ import cxflow as cx
 DOWNLOAD_URL = ['https://github.com/Cognexa/cxflow-examples/releases/download/cifar100-dataset/cifar-100-python.tar.gz']
 FILENAME = 'cifar-100-python.tar.gz'
 
-DICT_STRUCTURE = {'train_images': b'data',
-                  'train_labels_fine': b'fine_labels',
-                  'train_labels_coarse': b'coarse_labels',
-                  'test_images': b'data',
-                  'test_labels_fine': b'fine_labels',
-                  'test_labels_coarse': b'coarse_labels'}
+DOWNLOAD_STRUCTURE = {'train': {'images': b'data', 'labels': b'fine_labels'},
+                  'test': {'images': b'data', 'labels': b'fine_labels'},
+                  'meta': {'label_names': b'fine_label_names'}}
 
 
 class CIFARDataset(cx.DownloadableDataset):
@@ -25,7 +23,7 @@ class CIFARDataset(cx.DownloadableDataset):
         self._batch_size = batch_size
         self._data_root = data_root
         self._download_urls = DOWNLOAD_URL
-        self._data = {}
+        self._data = {'train': {}, 'test': {}, 'label_names': None}
         self._data_loaded = False
 
     def _load_data(self) -> None:
@@ -37,30 +35,33 @@ class CIFARDataset(cx.DownloadableDataset):
                 raise FileNotFoundError('File `{}` does not exist. '
                                         'Run `cxflow dataset download <path-to-config>` first!'.format(file_path))
 
-            with tarfile.open(file_path, 'r:gz') as files:
-                files.extractall(self.data_root)
+            with tarfile.open(file_path, 'r') as files:
+                files.extractall(path=self.data_root)
 
-            for key in DICT_STRUCTURE:
-                if 'train' in key:
-                    with open(path.join(self.data_root, 'cifar-100-python', 'train'), 'rb') as train_file:
-                        dict = pickle.load(train_file, encoding='bytes')
-                        self._data[key] = dict[DICT_STRUCTURE[key]]
-                else:
-                    with open(path.join(self.data_root, 'cifar-100-python', 'test'), 'rb') as test_file:
-                        dict = pickle.load(test_file, encoding='bytes')
-                        self._data[key] = dict[DICT_STRUCTURE[key]]
+            for key in DOWNLOAD_STRUCTURE:
+                with open(path.join(self.data_root, 'cifar-100-python', key), 'rb') as in_file:
+                    dict = pickle.load(in_file, encoding='bytes')
+                    for key_data in DOWNLOAD_STRUCTURE[key]:
+                        if key_data != 'label_names':
+                            self._data[key][key_data] = dict[DOWNLOAD_STRUCTURE[key][key_data]]
+                        else:
+                            self._data[key_data] = dict[DOWNLOAD_STRUCTURE[key][key_data]]
+
+            self._data['train']['images'] = self._data['train']['images'].reshape(self._data['train']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("uint8")
+            self._data['test']['images'] = self._data['test']['images'].reshape(self._data['test']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("uint8")
+
+            shutil.rmtree(path.join(self.data_root, 'cifar-100-python'))
+
             self._data_loaded = True
 
     def train_stream(self) -> cx.Stream:
         self._load_data()
-        for i in range(0, len(self._data['train_labels']), self._batch_size):
-            yield {'images': self._data['train_images'][i: i + self._batch_size],
-                   'fine_labels': self._data['train_labels_fine'][i: i + self._batch_size],
-                   'coarse_labels': self._data['train_labels_coarse'][i: i + self._batch_size]}
+        for i in range(0, len(self._data['train']['images']), self._batch_size):
+            yield {'images': self._data['train']['images'][i: i + self._batch_size],
+                   'labels': self._data['train']['labels'][i: i + self._batch_size]}
 
     def test_stream(self) -> cx.Stream:
         self._load_data()
-        for i in range(0, len(self._data['test_labels']), self._batch_size):
-            yield {'images': self._data['test_images'][i: i + self._batch_size],
-                   'fine_labels': self._data['test_labels_fine'][i: i + self._batch_size],
-                   'coarse_labels': self._data['test_labels_coarse'][i: i + self._batch_size]}
+        for i in range(0, len(self._data['test']['images']), self._batch_size):
+            yield {'images': self._data['test']['images'][i: i + self._batch_size],
+                   'labels': self._data['test']['labels'][i: i + self._batch_size]}
