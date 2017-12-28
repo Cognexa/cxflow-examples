@@ -55,19 +55,34 @@ class CIFARDataset(cx.DownloadableDataset):
 
             self._data_loaded = True
 
-    def grid_of_images(self) -> None:
+    def grid_of_images(self, one_class=False, label_class=0) -> None:
         self._load_data()
+        # one_class = True
+
+        if one_class:
+            indexes = [i for i, label in enumerate(self._data['train']['labels']) if label == label_class][:100]
+            i = -1
+
         for col in range(10):
             for row in range(10):
-                if row != 0:
-                    row_array = np.concatenate((row_array, self._data['train']['images'][row + (col * 10)]), axis=1)
+
+                if one_class:
+                    i += 1
+                    index = indexes[i]
                 else:
-                    row_array = self._data['train']['images'][row + (col * 10)]
+                    index = row + (col * 10)
+
+                if row != 0:
+                    row_array = np.concatenate((row_array, self._data['train']['images'][index]), axis=1)
+                else:
+                    row_array = self._data['train']['images'][index]
+
             if col != 0:
                 output_array = np.concatenate((output_array, row_array), axis=0)
             else:
                 output_array = row_array
             row_array = None
+
         plt.imshow(output_array)
         plt.axis('off')
         plt.show()
