@@ -7,6 +7,7 @@ import shutil
 
 import numpy as np
 import cxflow as cx
+from matplotlib import pyplot as plt
 
 DOWNLOAD_URL = ['https://github.com/Cognexa/cxflow-examples/releases/download/cifar100-dataset/cifar-100-python.tar.gz']
 FILENAME = 'cifar-100-python.tar.gz'
@@ -53,6 +54,23 @@ class CIFARDataset(cx.DownloadableDataset):
             shutil.rmtree(path.join(self.data_root, 'cifar-100-python'))
 
             self._data_loaded = True
+
+    def grid_of_images(self) -> None:
+        self._load_data()
+        for col in range(10):
+            for row in range(10):
+                if row != 0:
+                    row_array = np.concatenate((row_array, self._data['train']['images'][row + (col * 10)]), axis=1)
+                else:
+                    row_array = self._data['train']['images'][row + (col * 10)]
+            if col != 0:
+                output_array = np.concatenate((output_array, row_array), axis=0)
+            else:
+                output_array = row_array
+            row_array = None
+        plt.imshow(output_array)
+        plt.axis('off')
+        plt.show()
 
     def train_stream(self) -> cx.Stream:
         self._load_data()
