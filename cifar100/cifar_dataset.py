@@ -26,8 +26,10 @@ class CIFARDataset(cx.DownloadableDataset):
         self._download_urls = DOWNLOAD_URL
         self._data = {'train': {}, 'test': {}, 'label_names': None}
         self._data_loaded = False
+        self._mean = None
+        self._std = None
 
-    def _load_data(self) -> None:
+    def _load_data(self, normalize: bool=True) -> None:
         if not self._data_loaded:
             logging.info('Loading Cifar100 data to memory')
 
@@ -48,15 +50,27 @@ class CIFARDataset(cx.DownloadableDataset):
                         else:
                             self._data[key_data] = dict[DOWNLOAD_STRUCTURE[key][key_data]]
 
-            self._data['train']['images'] = self._data['train']['images'].reshape(self._data['train']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("uint8")
-            self._data['test']['images'] = self._data['test']['images'].reshape(self._data['test']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("uint8")
+            if normalize:
+                self._data['test']['images'] = self._data['test']['images'].reshape(self._data['test']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("float32")
+                self._data['train']['images'] = self._data['train']['images'].reshape(self._data['train']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("float32")
+
+                self._mean = np.mean(self._data['train']['images'], axis=0, keepdims=True)
+                self._std = np.std(self._data['train']['images'])
+
+                self._data['train']['images'] = (self._data['train']['images'] - self._mean) / self._std
+                self._data['test']['images'] = (self._data['test']['images'] - self._mean) / self._std
+
+            else:
+                self._data['test']['images'] = self._data['test']['images'].reshape(self._data['test']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("uint8")
+                self._data['train']['images'] = self._data['train']['images'].reshape(self._data['train']['images'].shape[0], 3, 32, 32).transpose(0,2,3,1).astype("uint8")
+
 
             shutil.rmtree(path.join(self.data_root, 'cifar-100-python'))
 
             self._data_loaded = True
 
     def grid_of_images(self, one_class=False, label_class=0) -> None:
-        self._load_data()
+        self._load_data(normalize=False)
         # one_class = True
 
         if one_class:

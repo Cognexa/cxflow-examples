@@ -1,12 +1,14 @@
 dataset:
   class: cifar100.CIFARDataset
   batch_size: 128
+  augment:
+    horizontal_flip: True
 
 model:
   name: WideResNet
   class: cifar100.WideResNet
   depth: 16
-  k: 1
+  k: 2
   dropout: 0.3
 
   optimizer:
@@ -33,5 +35,3 @@ hooks:
       stream: test
   - StopAfter:
       epochs: 50
-  - cxflow_tensorflow.hooks.WriteTensorBoard:
-      visualize_graph: True
