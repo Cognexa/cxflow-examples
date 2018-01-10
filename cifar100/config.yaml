@@ -5,8 +5,8 @@ dataset:
 model:
   name: WideResNet
   class: cifar100.WideResNet
-  depth: 10
-  k: 2
+  depth: 16
+  k: 1
   dropout: 0.3
 
   optimizer:
@@ -33,4 +33,5 @@ hooks:
       stream: test
   - StopAfter:
       epochs: 50
-  
+  - cxflow_tensorflow.hooks.WriteTensorBoard:
+      visualize_graph: True

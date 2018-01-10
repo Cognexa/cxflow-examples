@@ -1,6 +1,7 @@
 import tensorflow as tf
 import cxflow_tensorflow as cxtf
 from tensorflow.contrib import slim
+from keras.layers import merge
 
 
 def wide_block(inputs, filters, n, layer, dropout, is_training):
@@ -14,23 +15,21 @@ def wide_block(inputs, filters, n, layer, dropout, is_training):
     shortcut = slim.conv2d(inputs, filters, stride=stride)
     net = slim.conv2d(inputs, filters, stride=stride)
     net = slim.batch_norm(net, activation_fn=tf.nn.relu)
-    if dropout != None:
+    if dropout != 0:
         net = slim.dropout(net, dropout, is_training=is_training)
     net = slim.conv2d(net, filters)
-    net = slim.batch_norm(net, activation_fn=tf.nn.relu)
-    net += shortcut
-    shortcut = net
+    net = merge([net, shortcut], mode='sum')
 
     for block in range(int(n)-1):
+        shortcut = net
+        net = slim.batch_norm(net, activation_fn=tf.nn.relu)
         net = slim.conv2d(net, filters)
         net = slim.batch_norm(net, activation_fn=tf.nn.relu)
-        if dropout != None:
+        if dropout != 0:
             net = slim.dropout(net, dropout, is_training=is_training)
         net = slim.conv2d(net, filters)
-        net = slim.batch_norm(net, activation_fn=tf.nn.relu)
-        # net = tf.concat([net, shortcut], 1, name='sum')
-        net += shortcut
-        shortcut = net
+        net = merge([net, shortcut], mode='sum')
+    net = slim.batch_norm(net, activation_fn=tf.nn.relu)
 
     return net
 
@@ -45,11 +44,10 @@ def wrn_model(inputs, depth, k, weight_decay, dropout, num_classes, is_training=
 
 
     with slim.arg_scope([slim.conv2d],
-                        activation_fn=tf.nn.relu,
+                        activation_fn=None,
                         stride=1,
                         kernel_size=[3,3],
                         padding='SAME',
-                        weights_initializer=tf.truncated_normal_initializer(0.0, 0.01),
                         weights_regularizer=slim.l2_regularizer(weight_decay)):
 
         net = slim.conv2d(inputs, num_filters[0])
@@ -58,9 +56,8 @@ def wrn_model(inputs, depth, k, weight_decay, dropout, num_classes, is_training=
         for layer, filters in enumerate(num_filters[1:]):
             net = wide_block(net, filters, n, layer+2, dropout, is_training)
 
-        net = slim.avg_pool2d(net, 8, stride=1, padding='SAME')
+        net = slim.avg_pool2d(net, 8, stride=1, padding='VALID')
         net = slim.flatten(net)
-        net = slim.fully_connected(net, num_filters[3]*8*8, activation_fn=tf.nn.relu)
         net = slim.fully_connected(net, num_classes, activation_fn=None)
 
     return net
