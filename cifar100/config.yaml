@@ -7,8 +7,8 @@ dataset:
 model:
   name: WideResNet
   class: cifar100.WideResNet
-  depth: 16
-  k: 2
+  depth: 28
+  k: 10
   dropout: 0.3
 
   optimizer:
