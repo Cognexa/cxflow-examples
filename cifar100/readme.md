@@ -14,14 +14,31 @@ git clone https://github.com/Cognexa/cxflow-examples.git
 cd cxflow-examples
 ```
 
-2. Download the data and train the network:
+2. Download the data:
 ```
 cxflow dataset download cifar100
+```
+3. (Optional) Test your loaded images. You have two options:
+  1. Save grid of first 100 images from loaded train images.
+  ```
+  cxflow dataset grid_of_images cifar100
+  ```
+  This will save new image in your cxflow-examples folder.
+
+  2. Save grid of first 100 images from specific class. You have to specify which class do you want to save in your config file. Just set in dataset block which class and again call:
+  ```
+  label_class: 0
+  cxflow dataset grid_of_images cifar100
+  ```
+  This will save image with apples (because 0 is label for apples) in your cxflow-examples folder 
+
+4. Train the network:
+```
 cxflow train cifar100
 ```
 The best network will be saved in `log/WideResnet_<dir_name>`.
 
-3. Resume the training
+5. Resume the training
 ```
 cxflow resume cifar100
 ```

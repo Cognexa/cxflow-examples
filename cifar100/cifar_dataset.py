@@ -20,10 +20,11 @@ DOWNLOAD_STRUCTURE = {'train': {'images': b'data', 'labels': b'fine_labels'},
 class CIFARDataset(cx.DownloadableDataset):
     """ Cifar100 dataset for image classification."""
 
-    def _configure_dataset(self, data_root=path.join('cifar100', '.cifar-data'), batch_size:int=100, **kwargs) -> None:
+    def _configure_dataset(self, data_root=path.join('cifar100', '.cifar-data'), batch_size:int=100, label_class:int=-1, **kwargs) -> None:
         self._batch_size = batch_size
         self._data_root = data_root
         self._download_urls = DOWNLOAD_URL
+        self._label_class = label_class
         self._data = {'train': {}, 'test': {}, 'label_names': None}
         self._data_loaded = False
         self._mean = None
@@ -69,18 +70,17 @@ class CIFARDataset(cx.DownloadableDataset):
 
             self._data_loaded = True
 
-    def grid_of_images(self, one_class=False, label_class=0) -> None:
+    def grid_of_images(self) -> None:
         self._load_data(normalize=False)
-        # one_class = True
 
-        if one_class:
-            indexes = [i for i, label in enumerate(self._data['train']['labels']) if label == label_class][:100]
+        if self._label_class >= 0:
+            indexes = [i for i, label in enumerate(self._data['train']['labels']) if label == self._label_class][:100]
             i = -1
 
         for col in range(10):
             for row in range(10):
 
-                if one_class:
+                if self._label_class >= 0:
                     i += 1
                     index = indexes[i]
                 else:
@@ -97,9 +97,8 @@ class CIFARDataset(cx.DownloadableDataset):
                 output_array = row_array
             row_array = None
 
-        plt.imshow(output_array)
         plt.axis('off')
-        plt.show()
+        plt.imsave('cifar100_images.png', output_array)
 
     def train_stream(self) -> cx.Stream:
         self._load_data()

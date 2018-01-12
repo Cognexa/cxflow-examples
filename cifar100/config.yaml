@@ -34,4 +34,4 @@ hooks:
   - SaveBest:
       stream: test
   - StopAfter:
-      epochs: 50
+      epochs: 200

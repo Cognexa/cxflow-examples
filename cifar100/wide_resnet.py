@@ -33,7 +33,6 @@ def wide_block(inputs, filters, n, layer, dropout, is_training):
 
     return net
 
-
 def wrn_model(inputs, depth, k, weight_decay, dropout, num_classes, is_training=True):
 
     if ((depth - 4) % 6) != 0:
@@ -41,7 +40,6 @@ def wrn_model(inputs, depth, k, weight_decay, dropout, num_classes, is_training=
 
     num_filters = [16, 16*k, 32*k, 64*k]
     n = (depth - 4) / 6
-
 
     with slim.arg_scope([slim.conv2d],
                         activation_fn=None,
