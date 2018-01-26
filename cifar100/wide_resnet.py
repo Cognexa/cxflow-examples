@@ -1,7 +1,6 @@
 import tensorflow as tf
 import cxflow_tensorflow as cxtf
 from tensorflow.contrib import slim
-from keras.layers import add
 
 
 def wide_block(inputs, filters, n, layer, dropout, is_training):
@@ -18,7 +17,7 @@ def wide_block(inputs, filters, n, layer, dropout, is_training):
     if dropout != 0:
         net = slim.dropout(net, dropout, is_training=is_training)
     net = slim.conv2d(net, filters)
-    net = add([net, shortcut])
+    net += shortcut
 
     for block in range(int(n)-1):
         shortcut = net
@@ -28,7 +27,7 @@ def wide_block(inputs, filters, n, layer, dropout, is_training):
         if dropout != 0:
             net = slim.dropout(net, dropout, is_training=is_training)
         net = slim.conv2d(net, filters)
-        net = add([net, shortcut])
+        net += shortcut
     net = slim.batch_norm(net, activation_fn=tf.nn.relu)
 
     return net
