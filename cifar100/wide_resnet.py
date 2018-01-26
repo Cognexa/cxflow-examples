@@ -32,7 +32,7 @@ def wide_block(inputs, filters, n, layer, dropout, is_training):
 
     return net
 
-def wrn_model(inputs, depth, k, weight_decay, dropout, num_classes, is_training=True):
+def wrn_model(inputs, depth, k, weight_decay, dropout, num_classes, is_training):
 
     if ((depth - 4) % 6) != 0:
         raise ValueError('You have to choose depth which is ((depth - 4) % 6) == 0')
@@ -66,7 +66,7 @@ class WideResNet(cxtf.BaseModel):
         images = tf.placeholder(tf.float32, shape=[None, 32, 32, 3], name='images')
         labels = tf.placeholder(tf.int64, shape=[None], name='labels')
 
-        net = wrn_model(images, depth, k, weight_decay, dropout, num_classes, is_training=True)
+        net = wrn_model(images, depth, k, weight_decay, dropout, num_classes, self._is_training)
 
         loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=net)
         tf.identity(loss, name='loss')
