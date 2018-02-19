@@ -6,7 +6,7 @@ dataset:
 
 model:
   name: WideResNet
-  class: cifar100.WideResNet
+  class: cifar100.wide_resnet.WideResNet
   depth: 28
   k: 10
   dropout: 0.3
