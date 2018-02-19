@@ -7,7 +7,7 @@ import shutil
 
 import numpy as np
 import cxflow as cx
-from matplotlib import pyplot as plt
+import cv2
 
 DOWNLOAD_URL = ['https://github.com/Cognexa/cxflow-examples/releases/download/cifar100-dataset/cifar-100-python.tar.gz']
 FILENAME = 'cifar-100-python.tar.gz'
@@ -97,8 +97,7 @@ class CIFARDataset(cx.DownloadableDataset):
                 output_array = row_array
             row_array = None
 
-        plt.axis('off')
-        plt.imsave('cifar100_images.png', output_array)
+        cv2.imwrite('cifar100_images.png', output_array)
 
     def train_stream(self) -> cx.Stream:
         self._load_data()
