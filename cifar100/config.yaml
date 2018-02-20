@@ -1,8 +1,6 @@
 dataset:
   class: cifar100.CIFARDataset
   batch_size: 128
-  augment:
-    horizontal_flip: True
 
 model:
   name: WideResNet
@@ -13,7 +11,7 @@ model:
 
   optimizer:
     class: MomentumOptimizer
-    learning_rate: 0.01
+    learning_rate: 0.1
     momentum: 0.9
     use_nesterov: True
 
@@ -25,13 +23,14 @@ main_loop:
 
 hooks:
   - cxflow_tensorflow.hooks.DecayLR:
-      decay_value: 0.98
+      decay_value: 0.974
       variable_name: learning_rate
       decay_type: multiply
   - ComputeStats:
       variables: [loss, accuracy]
   - LogVariables
-  - SaveBest:
-      stream: test
+  - SaveEvery:
+      n_epochs: 10
   - StopAfter:
       epochs: 200
+  - ShowProgress
