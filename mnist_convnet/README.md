@@ -17,7 +17,7 @@ cxflow dataset download mnist_convnet
 cxflow train mnist_convnet
 ```
 
-3. Train on two GPUs (omit `model.n_gpus:int=2` in order to train on CPU):
+3. Train on two GPUs (omit `model.n_gpus=2` in order to train on CPU):
 ```
-cxflow train mnist_convnet model.n_gpus:int=2
+cxflow train mnist_convnet model.n_gpus=2
 ```
